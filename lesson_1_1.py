@@ -17,12 +17,10 @@ class AppDynamicsJob(unittest.TestCase):
         driver.find_element_by_name("user").send_keys("admin")
         driver.find_element_by_name("pass").clear()
         driver.find_element_by_name("pass").send_keys("secret")
-        driver.find_element_by_xpath(
-            "(.//*[normalize-space(text()) and normalize-space(.)='Password:'])[1]/following::input[2]").click()
+        driver.find_element_by_xpath("//input[@value='Login']").click()
         driver.find_element_by_name("new").click()
         driver.find_element_by_name("group_name").send_keys("qwe")
-        driver.find_element_by_xpath(
-            "(.//*[normalize-space(text()) and normalize-space(.)='Groups'])[1]/following::form[1]").click()
+        driver.find_element_by_name("submit").click()
         driver.find_element_by_link_text("Logout").click()
         pass
 
