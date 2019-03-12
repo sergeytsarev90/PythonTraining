@@ -12,12 +12,7 @@ class ContactHelper:
 
     def create(self, contact):
         driver = self.app.driver
-        driver.find_element_by_name("firstname").send_keys(contact.firstname)
-        driver.find_element_by_name("middlename").send_keys(contact.middlename)
-        driver.find_element_by_name("lastname").send_keys(contact.lastname)
-        driver.find_element_by_name("nickname").send_keys(contact.nickname)
-        driver.find_element_by_name("mobile").send_keys(contact.mobile)
-        driver.find_element_by_name("email").send_keys(contact.email)
+        self.fill_contact_form(contact)
         driver.find_element_by_xpath("//div[@id='content']//input[1][@name='submit']").click()
 
     def delete_first_contact(self):
@@ -31,6 +26,11 @@ class ContactHelper:
         driver = self.app.driver
         driver.find_element_by_xpath("//tr[2]//td[1]").click()
         driver.find_element_by_xpath("//tr[2]//td[8]//img[@title='Edit']").click()
+        self.fill_contact_form(contact)
+        driver.find_element_by_name("update").click()
+
+    def fill_contact_form(self, contact):
+        driver = self.app.driver
         driver.find_element_by_name("firstname").clear()
         driver.find_element_by_name("firstname").send_keys(contact.firstname)
         driver.find_element_by_name("middlename").clear()
@@ -43,6 +43,5 @@ class ContactHelper:
         driver.find_element_by_name("mobile").send_keys(contact.mobile)
         driver.find_element_by_name("email").clear()
         driver.find_element_by_name("email").send_keys(contact.email)
-        driver.find_element_by_name("update").click()
 
 

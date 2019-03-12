@@ -8,6 +8,7 @@ def test_add_contact(app):
     app.contact.create(Contact(firstname="Ivan", middlename="Ivanovich", lastname="Ivanov", nickname="Ivan", mobile="8915439323", email="ivanov@ya.ru"))
     app.contact.open_start_page()
     app.session.logout()
+    pass
 
 def test_delete_first_contact(app):
     app.open_home_page()
