@@ -19,21 +19,28 @@ class GroupHelper:
 
     def delete_first_group(self):
         driver = self.app.driver
-        driver.find_element_by_name("selected[]").click()
+        self.select_first_group()
         driver.find_element_by_name("delete").click()
 
     def edit_first_group(self, group):
         driver = self.app.driver
-        driver.find_element_by_name("selected[]").click()
+        self.select_first_group()
         driver.find_element_by_name("edit").click()
         self.fill_group_form(group)
         driver.find_element_by_name("update").click()
 
-    def fill_group_form(self, group):
+    def select_first_group(self):
         driver = self.app.driver
-        driver.find_element_by_name("group_name").clear()
-        driver.find_element_by_name("group_name").send_keys(group.name)
-        driver.find_element_by_name("group_header").clear()
-        driver.find_element_by_name("group_header").send_keys(group.header)
-        driver.find_element_by_name("group_footer").clear()
-        driver.find_element_by_name("group_footer").send_keys(group.footer)
+        driver.find_element_by_name("selected[]").click()
+
+    def fill_group_form(self, group):
+        self.change_field_value("group_name", group.name)
+        self.change_field_value("group_header", group.header)
+        self.change_field_value("group_footer", group.footer)
+
+
+    def change_field_value(self, field_name, text):
+        driver = self.app.driver
+        if text is not None:
+            driver.find_element_by_name(field_name).clear()
+            driver.find_element_by_name(field_name).send_keys(text)

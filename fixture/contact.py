@@ -29,19 +29,19 @@ class ContactHelper:
         self.fill_contact_form(contact)
         driver.find_element_by_name("update").click()
 
-    def fill_contact_form(self, contact):
-        driver = self.app.driver
-        driver.find_element_by_name("firstname").clear()
-        driver.find_element_by_name("firstname").send_keys(contact.firstname)
-        driver.find_element_by_name("middlename").clear()
-        driver.find_element_by_name("middlename").send_keys(contact.middlename)
-        driver.find_element_by_name("lastname").clear()
-        driver.find_element_by_name("lastname").send_keys(contact.lastname)
-        driver.find_element_by_name("nickname").clear()
-        driver.find_element_by_name("nickname").send_keys(contact.nickname)
-        driver.find_element_by_name("mobile").clear()
-        driver.find_element_by_name("mobile").send_keys(contact.mobile)
-        driver.find_element_by_name("email").clear()
-        driver.find_element_by_name("email").send_keys(contact.email)
 
+    def fill_contact_form(self, contact):
+        self.change_field_value("firstname", contact.firstname)
+        self.change_field_value("middlename", contact.middlename)
+        self.change_field_value("lastname", contact.lastname)
+        self.change_field_value("nickname", contact.nickname)
+        self.change_field_value("mobile", contact.mobile)
+        self.change_field_value("email", contact.email)
+
+
+    def change_field_value(self, field_name, text):
+        driver = self.app.driver
+        if text is not None:
+            driver.find_element_by_name(field_name).clear()
+            driver.find_element_by_name(field_name).send_keys(text)
 
