@@ -16,11 +16,13 @@ class GroupHelper:
         driver.find_element_by_name("new").click()
         self.fill_group_form(group)
         driver.find_element_by_name("submit").click()
+        self.return_to_page()
 
     def delete_first_group(self):
         driver = self.app.driver
         self.select_first_group()
         driver.find_element_by_name("delete").click()
+        self.return_to_page()
 
     def edit_first_group(self, group):
         driver = self.app.driver
@@ -28,6 +30,7 @@ class GroupHelper:
         driver.find_element_by_name("edit").click()
         self.fill_group_form(group)
         driver.find_element_by_name("update").click()
+        self.return_to_page()
 
     def select_first_group(self):
         driver = self.app.driver
@@ -44,3 +47,7 @@ class GroupHelper:
         if text is not None:
             driver.find_element_by_name(field_name).clear()
             driver.find_element_by_name(field_name).send_keys(text)
+
+    def count(self):
+        driver = self.app.driver
+        return len(driver.find_elements_by_name("selected[]"))

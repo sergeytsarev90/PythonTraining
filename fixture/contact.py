@@ -12,14 +12,17 @@ class ContactHelper:
 
     def create(self, contact):
         driver = self.app.driver
+        self.open_add_page()
         self.fill_contact_form(contact)
         driver.find_element_by_xpath("//div[@id='content']//input[1][@name='submit']").click()
+        self.open_start_page()
 
     def delete_first_contact(self):
         driver = self.app.driver
         driver.find_element_by_xpath("//tr[2]//td[1]").click()
         driver.find_element_by_xpath("//input[@value='Delete']").click()
         driver.switch_to_alert().accept()
+        self.open_start_page()
 
 
     def edit_first_contact(self, contact):
@@ -28,6 +31,7 @@ class ContactHelper:
         driver.find_element_by_xpath("//tr[2]//td[8]//img[@title='Edit']").click()
         self.fill_contact_form(contact)
         driver.find_element_by_name("update").click()
+        self.open_start_page()
 
 
     def fill_contact_form(self, contact):
@@ -44,4 +48,8 @@ class ContactHelper:
         if text is not None:
             driver.find_element_by_name(field_name).clear()
             driver.find_element_by_name(field_name).send_keys(text)
+
+    def count(self):
+        driver = self.app.driver
+        return len(driver.find_elements_by_xpath("//tr[2]//td[1]"))
 
