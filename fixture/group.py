@@ -5,11 +5,13 @@ class GroupHelper:
 
     def open_page(self):
         driver = self.app.driver
-        driver.find_element_by_link_text("groups").click()
+        if not (driver.current_url.endswith("/groups.php") and len(driver.find_elements_by_name("new"))>0):
+            driver.find_element_by_link_text("groups").click()
 
     def return_to_page(self):
         driver = self.app.driver
-        driver.find_element_by_xpath("//a[contains(text(),'group page')]").click()
+        if not (driver.current_url.endswith("/groups.php") and len(driver.find_elements_by_name("new")) > 0):
+            driver.find_element_by_xpath("//a[contains(text(),'group page')]").click()
 
     def create(self, group):
         driver = self.app.driver

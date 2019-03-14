@@ -4,11 +4,14 @@ class ContactHelper:
 
     def open_start_page(self):
         driver = self.app.driver
-        driver.find_element_by_link_text("home").click()
+        if not (driver.current_url.endswith("/index.php") and len(driver.find_elements_by_xpath("//input[@value='Delete']")) > 0):
+            driver.find_element_by_link_text("home").click()
 
     def open_add_page(self):
         driver = self.app.driver
-        driver.find_element_by_link_text("add new").click()
+        if not (driver.current_url.endswith("/edit.php") and len(
+                driver.find_elements_by_xpath("//div[@id='content']//input[1][@name='submit']")) > 0):
+            driver.find_element_by_link_text("add new").click()
 
     def create(self, contact):
         driver = self.app.driver
