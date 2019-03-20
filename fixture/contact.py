@@ -62,7 +62,7 @@ class ContactHelper:
         driver = self.app.driver
         self.open_start_page()
         contacts = []
-        elements =  driver.find_elements_by_xpath("//tr[@name = 'entry']")
+        elements = driver.find_elements_by_xpath("//tr[@name = 'entry']")
         for element in elements:
             id = element.find_element_by_xpath("//td[1]/input").get_attribute("id")
             lastname = element.find_element_by_xpath("//td[2]").text
