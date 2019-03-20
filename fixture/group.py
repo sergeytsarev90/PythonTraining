@@ -63,7 +63,7 @@ class GroupHelper:
         groups = []
         for element in driver.find_elements_by_css_selector('span.group'):
             text = element.text
-            id = element.find_element_by_name("selected[]").get_attribute("Value")
+            id = element.find_element_by_name("selected[]").get_attribute("value")
             groups.append(Group(name=text, id=id))
         return groups
 
