@@ -64,8 +64,8 @@ class ContactHelper:
         contacts = []
         elements = driver.find_elements_by_xpath("//tr[@name = 'entry']")
         for element in elements:
-            id = element.find_element_by_xpath("//td[1]/input").get_attribute("id")
-            lastname = element.find_element_by_xpath("//td[2]").text
-            firstname = element.find_element_by_xpath("//td[3]").text
+            id = element.find_element_by_xpath(".//td[1]/input").get_attribute("id")
+            lastname = element.find_element_by_xpath(".//td[2]").text
+            firstname = element.find_element_by_xpath(".//td[3]").text
             contacts.append(Contact(firstname=firstname,lastname=lastname, id=id))
         return contacts
