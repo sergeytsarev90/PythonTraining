@@ -24,22 +24,32 @@ class ContactHelper:
         self.contact_cache = None
 
     def delete_first_contact(self):
+        self.delete_contact_by_index(0)
+
+    def delete_contact_by_index(self,index):
         driver = self.app.driver
-        driver.find_element_by_xpath("//tr[2]//td[1]").click()
+        self.select_contact_by_index(index)
         driver.find_element_by_xpath("//input[@value='Delete']").click()
         driver.switch_to_alert().accept()
         self.open_start_page()
         self.contact_cache = None
 
-
     def edit_first_contact(self, contact):
+        self.edit_contact_by_index(0, contact)
+
+
+    def edit_contact_by_index(self,index, contact):
         driver = self.app.driver
-        driver.find_element_by_xpath("//tr[2]//td[1]").click()
-        driver.find_element_by_xpath("//tr[2]//td[8]//img[@title='Edit']").click()
+        self.select_contact_by_index(index)
+        driver.find_element_by_xpath("//tr["+str(index+2)+"]//td[8]//img[@title='Edit']").click()
         self.fill_contact_form(contact)
         driver.find_element_by_name("update").click()
         self.open_start_page()
         self.contact_cache = None
+
+    def select_contact_by_index(self, index):
+        driver = self.app.driver
+        driver.find_elements_by_xpath("//tr//td[1]")[index].click()
 
 
     def fill_contact_form(self, contact):
