@@ -40,12 +40,25 @@ class ContactHelper:
 
     def edit_contact_by_index(self,index, contact):
         driver = self.app.driver
-        self.select_contact_by_index(index)
-        driver.find_element_by_xpath("//tr[%s]//td[8]//img[@title='Edit']"%str(index+2)).click()
+        self.open_contact_to_edit_by_index(index)
         self.fill_contact_form(contact)
         driver.find_element_by_name("update").click()
         self.open_start_page()
         self.contact_cache = None
+
+    def open_contact_to_edit_by_index(self, index):
+        driver = self.app.driver
+        self.select_contact_by_index(index)
+        driver.find_element_by_xpath("//tr[%s]//td[8]//img[@title='Edit']" % str(index+2)).click()
+
+    def open_contact_to_view_by_index(self, index):
+        driver = self.app.driver
+        self.select_contact_by_index(index)
+        driver.find_element_by_xpath("//tr[%s]//td[7]//img[@title='Details']" % str(index+2)).click()
+
+        self.open_start_page()
+        self.contact_cache = None
+
 
     def select_contact_by_index(self, index):
         driver = self.app.driver
