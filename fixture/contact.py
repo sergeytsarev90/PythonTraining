@@ -49,14 +49,13 @@ class ContactHelper:
 
     def open_contact_to_edit_by_index(self, index):
         driver = self.app.driver
+        self.open_start_page()
         driver.find_element_by_xpath("//tr[%s]//td[8]//img[@title='Edit']" % str(index+2)).click()
 
     def open_contact_to_view_by_index(self, index):
         driver = self.app.driver
-        driver.find_element_by_xpath("//tr[%s]//td[7]//img[@title='Details']" % str(index+2)).click()
-
         self.open_start_page()
-        self.contact_cache = None
+        driver.find_element_by_xpath("//tr[%s]//td[7]//img[@title='Details']" % str(index+2)).click()
 
 
     def select_contact_by_index(self, index):
@@ -69,8 +68,15 @@ class ContactHelper:
         self.change_field_value("middlename", contact.middlename)
         self.change_field_value("lastname", contact.lastname)
         self.change_field_value("nickname", contact.nickname)
+        self.change_field_value("address", contact.address)
+        self.change_field_value("home", contact.homephone)
         self.change_field_value("mobile", contact.mobilephone)
+        self.change_field_value("address", contact.address)
+        self.change_field_value("work", contact.workphone)
+        self.change_field_value("phone2", contact.secondaryphone)
         self.change_field_value("email", contact.email)
+        self.change_field_value("email2", contact.email2)
+        self.change_field_value("email3", contact.email3)
 
 
     def change_field_value(self, field_name, text):
@@ -95,9 +101,11 @@ class ContactHelper:
                 id = element.find_element_by_xpath(".//td[1]/input").get_attribute("id")
                 lastname = element.find_element_by_xpath(".//td[2]").text
                 firstname = element.find_element_by_xpath(".//td[3]").text
+                address = element.find_element_by_xpath(".//td[4]").text
+                all_emails = element.find_element_by_xpath(".//td[5]").text
                 all_phones = element.find_element_by_xpath(".//td[6]").text
-                self.contact_cache.append(Contact(firstname=firstname,lastname=lastname,
-                                                  all_phones_from_home_page = all_phones, id=id))
+                self.contact_cache.append(Contact(firstname=firstname,lastname=lastname,address=address, id=id,
+                                                  all_phones_from_home_page = all_phones, all_emails_from_home_page= all_emails))
         return list(self.contact_cache)
 
 
@@ -106,16 +114,19 @@ class ContactHelper:
         self.open_contact_to_edit_by_index(index)
         firstname = driver.find_element_by_name("firstname").get_attribute("value")
         lastname = driver.find_element_by_name("lastname").get_attribute("value")
+        address = driver.find_element_by_name("address").get_attribute("value")
         id = driver.find_element_by_name("id").get_attribute("value")
         homephone = driver.find_element_by_name("home").get_attribute("value")
         workphone = driver.find_element_by_name("work").get_attribute("value")
         mobilephone = driver.find_element_by_name("mobile").get_attribute("value")
         secondaryphone = driver.find_element_by_name("phone2").get_attribute("value")
+        email = driver.find_element_by_name("email").get_attribute("value")
+        email2 = driver.find_element_by_name("email2").get_attribute("value")
+        email3 = driver.find_element_by_name("email3").get_attribute("value")
 
-        return Contact(firstname=firstname,lastname=lastname,
-                       id=id,homephone=homephone,
-                       workphone=workphone,mobilephone=mobilephone,
-                       secondaryphone=secondaryphone)
+        return Contact(firstname=firstname,lastname=lastname, address=address,id=id,homephone=homephone,
+                       workphone=workphone,mobilephone=mobilephone,secondaryphone=secondaryphone, email=email,
+                       email2=email2, email3=email3)
 
     def get_contact_from_view_page(self, index):
         driver = self.app.driver

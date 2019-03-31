@@ -6,7 +6,8 @@ import re
 def test_add_contact(app):
     old_contacts = app.contact.get_contact_list()
     contact = Contact(firstname="Ivan", middlename="Ivanovich", lastname="Ivanov", nickname="Ivan",
-                      address="Moscow Novaya 2", mobilephone="8915439323", email="ivanov@ya.ru", email2="af@efsdf.ru", email3="eoeo@ww.ru")
+                      address="Moscow Novaya 2",homephone="213124", mobilephone="8915439323",workphone="213123",
+                      secondaryphone="456436543", email="ivanov@ya.ru", email2="af@efsdf.ru", email3="eoeo@ww.ru")
     app.contact.create(contact)
     assert len(old_contacts)+1 == app.contact.count()
     new_contacts = app.contact.get_contact_list()
@@ -44,14 +45,21 @@ def test_edit_some_contact(app):
 
 
 def test_phones_on_home_page(app):
-    contact_from_home_page = app.contact.get_contact_list()[0]
-    contact_from_edit_page = app.contact.get_contact_info_from_edit_page(0)
+    index = randrange(app.contact.count())
+    contact_from_home_page = app.contact.get_contact_list()[index]
+    contact_from_edit_page = app.contact.get_contact_info_from_edit_page(index)
+    assert contact_from_home_page.firstname == contact_from_edit_page.firstname
+    assert contact_from_home_page.lastname == contact_from_edit_page.lastname
+    assert contact_from_home_page.address == contact_from_edit_page.address
     assert contact_from_home_page.all_phones_from_home_page == merge_phones_like_on_home_page(contact_from_edit_page)
+    assert contact_from_home_page.all_emails_from_home_page == merge_emails_like_on_home_page(contact_from_edit_page)
+
 
 
 def test_phones_on_view_page(app):
-    contact_from_view_page = app.contact.get_contact_from_view_page(0)
-    contact_from_edit_page = app.contact.get_contact_info_from_edit_page(0)
+    index = 0#randrange(app.contact.count())
+    contact_from_view_page = app.contact.get_contact_from_view_page(index)
+    contact_from_edit_page = app.contact.get_contact_info_from_edit_page(index)
     assert contact_from_view_page.homephone == contact_from_edit_page.homephone
     assert contact_from_view_page.workphone == contact_from_edit_page.workphone
     assert contact_from_view_page.mobilephone == contact_from_edit_page.mobilephone
@@ -66,3 +74,9 @@ def merge_phones_like_on_home_page(contact):
                             map(lambda x: clear(x),
                                 filter(lambda x: x is not None,
                                        [contact.homephone, contact.mobilephone, contact.workphone, contact.secondaryphone]))))
+
+def merge_emails_like_on_home_page(contact):
+    return "\n".join(filter(lambda x: x != "",
+                            map(lambda x: clear(x),
+                                filter(lambda x: x is not None,
+                                       [contact.email, contact.email2, contact.email3]))))
