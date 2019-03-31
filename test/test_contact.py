@@ -3,11 +3,39 @@ from model.contact import Contact
 from random import randrange
 import re
 
-def test_add_contact(app):
+from model.random_strings import random_string
+
+from random import randrange
+import pytest
+
+
+# def random_string(prefix,maxlen):
+#     symbols = string.ascii_letters+string.digits+string.punctuation+" "*5
+#     return prefix+"".join([random.choice(symbols) for i in range(random.randrange(maxlen))])
+
+
+
+testdata = [
+    Contact(firstname=firstname, middlename=middlename, lastname=lastname, nickname=nickname,
+                      address=address,homephone=homephone, mobilephone=mobilephone,workphone=workphone,
+                      secondaryphone=secondaryphone, email=email, email2=email2, email3=email3)
+    for firstname in ["",random_string("",10,"letters")]
+    for middlename in ["",random_string("",20,"letters")]
+    for lastname in ["",random_string("",20,"letters")]
+    for nickname in ["", random_string("", 10, "letters")]
+    for address in ["", random_string("", 20, "allstring")]
+    for homephone in ["", random_string("", 20, "digits")]
+    for mobilephone in ["", random_string("", 10, "digits")]
+    for workphone in ["", random_string("", 10, "digits")]
+    for secondaryphone in ["", random_string("", 20, "digits")]
+    for email in ["", random_string("", 20, "allstring")]
+    for email2 in ["", random_string("", 20, "allstring")]
+    for email3 in ["", random_string("", 20, "allstring")]
+]
+
+@pytest.mark.parametrize("contact", testdata, ids=[repr(x) for x in testdata])
+def test_add_contact(app,contact):
     old_contacts = app.contact.get_contact_list()
-    contact = Contact(firstname="Ivan", middlename="Ivanovich", lastname="Ivanov", nickname="Ivan",
-                      address="Moscow Novaya 2",homephone="213124", mobilephone="8915439323",workphone="213123",
-                      secondaryphone="456436543", email="ivanov@ya.ru", email2="af@efsdf.ru", email3="eoeo@ww.ru")
     app.contact.create(contact)
     assert len(old_contacts)+1 == app.contact.count()
     new_contacts = app.contact.get_contact_list()

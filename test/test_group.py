@@ -1,12 +1,28 @@
 # -*- coding: utf-8 -*-
 from model.group import Group
+from model.random_strings import random_string
+
 from random import randrange
+import pytest
 
 
-def test_add_group(app):
+# def random_string(prefix,maxlen):
+#     symbols = string.ascii_letters+string.digits+string.punctuation+" "*5
+#     return prefix+"".join([random.choice(symbols) for i in range(random.randrange(maxlen))])
+
+
+
+testdata = [
+    Group(name=name, header=header, footer=footer)
+    for name in ["",random_string("name",10,"allstring")]
+    for header in ["",random_string("header",20,"allstring")]
+    for footer in ["",random_string("footer",20,"allstring")]
+]
+
+@pytest.mark.parametrize("group", testdata, ids=[repr(x) for x in testdata])
+def test_add_group(app,group):
     app.group.open_page()
     old_groups = app.group.get_group_list()
-    group = Group(name="new_group", header="new_header", footer="new_footer")
     app.group.create(group)
     assert len(old_groups)+1 == app.group.count()
     new_groups = app.group.get_group_list()
