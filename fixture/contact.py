@@ -1,4 +1,5 @@
 from model.contact import Contact
+import re
 
 class ContactHelper:
     def __init__(self,app):
@@ -48,12 +49,10 @@ class ContactHelper:
 
     def open_contact_to_edit_by_index(self, index):
         driver = self.app.driver
-        self.select_contact_by_index(index)
         driver.find_element_by_xpath("//tr[%s]//td[8]//img[@title='Edit']" % str(index+2)).click()
 
     def open_contact_to_view_by_index(self, index):
         driver = self.app.driver
-        self.select_contact_by_index(index)
         driver.find_element_by_xpath("//tr[%s]//td[7]//img[@title='Details']" % str(index+2)).click()
 
         self.open_start_page()
@@ -70,7 +69,7 @@ class ContactHelper:
         self.change_field_value("middlename", contact.middlename)
         self.change_field_value("lastname", contact.lastname)
         self.change_field_value("nickname", contact.nickname)
-        self.change_field_value("mobile", contact.mobile)
+        self.change_field_value("mobile", contact.mobilephone)
         self.change_field_value("email", contact.email)
 
 
@@ -96,5 +95,41 @@ class ContactHelper:
                 id = element.find_element_by_xpath(".//td[1]/input").get_attribute("id")
                 lastname = element.find_element_by_xpath(".//td[2]").text
                 firstname = element.find_element_by_xpath(".//td[3]").text
-                self.contact_cache.append(Contact(firstname=firstname,lastname=lastname, id=id))
+                all_phones = element.find_element_by_xpath(".//td[6]").text
+                self.contact_cache.append(Contact(firstname=firstname,lastname=lastname,
+                                                  all_phones_from_home_page = all_phones, id=id))
         return list(self.contact_cache)
+
+
+    def get_contact_info_from_edit_page(self, index):
+        driver = self.app.driver
+        self.open_contact_to_edit_by_index(index)
+        firstname = driver.find_element_by_name("firstname").get_attribute("value")
+        lastname = driver.find_element_by_name("lastname").get_attribute("value")
+        id = driver.find_element_by_name("id").get_attribute("value")
+        homephone = driver.find_element_by_name("home").get_attribute("value")
+        workphone = driver.find_element_by_name("work").get_attribute("value")
+        mobilephone = driver.find_element_by_name("mobile").get_attribute("value")
+        secondaryphone = driver.find_element_by_name("phone2").get_attribute("value")
+
+        return Contact(firstname=firstname,lastname=lastname,
+                       id=id,homephone=homephone,
+                       workphone=workphone,mobilephone=mobilephone,
+                       secondaryphone=secondaryphone)
+
+    def get_contact_from_view_page(self, index):
+        driver = self.app.driver
+        self.open_contact_to_view_by_index(index)
+        text = driver.find_element_by_id("content").text
+        homephone = re.search("H: (.*)",text).group(1)
+        workphone = re.search("W: (.*)",text).group(1)
+        mobilephone = re.search("M: (.*)",text).group(1)
+        secondaryphone = re.search("P: (.*)",text).group(1)
+        return Contact(homephone=homephone,workphone=workphone,mobilephone=mobilephone,
+                       secondaryphone=secondaryphone)
+
+
+
+
+
+
