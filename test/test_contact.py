@@ -16,21 +16,15 @@ import pytest
 
 
 testdata = [
-    Contact(firstname=firstname, middlename=middlename, lastname=lastname, nickname=nickname,
-                      address=address,homephone=homephone, mobilephone=mobilephone,workphone=workphone,
-                      secondaryphone=secondaryphone, email=email, email2=email2, email3=email3)
-    for firstname in ["",random_string("",10,"letters")]
-    for middlename in ["",random_string("",20,"letters")]
-    for lastname in ["",random_string("",20,"letters")]
-    for nickname in ["", random_string("", 10, "letters")]
-    for address in ["", random_string("", 20, "allstring")]
-    for homephone in ["", random_string("", 20, "digits")]
-    for mobilephone in ["", random_string("", 10, "digits")]
-    for workphone in ["", random_string("", 10, "digits")]
-    for secondaryphone in ["", random_string("", 20, "digits")]
-    for email in ["", random_string("", 20, "allstring")]
-    for email2 in ["", random_string("", 20, "allstring")]
-    for email3 in ["", random_string("", 20, "allstring")]
+    Contact(firstname="", middlename="", lastname="", nickname="", address="",homephone="", mobilephone="",workphone="",
+                      secondaryphone="", email="", email2="", email3="")]+[
+    Contact(firstname=random_string("",10,"letters"), middlename=random_string("",20,"letters"),
+            lastname=random_string("",20,"letters"), nickname=random_string("", 10, "letters"),
+            address=random_string("", 20, "allstring"),homephone=random_string("", 20, "digits"),
+            mobilephone=random_string("", 10, "digits"),workphone=random_string("", 10, "digits"),
+            secondaryphone=random_string("", 20, "digits"), email=random_string("", 20, "allstring"),
+            email2=random_string("", 20, "allstring"), email3=random_string("", 20, "allstring"))
+    for i in range(5)
 ]
 
 @pytest.mark.parametrize("contact", testdata, ids=[repr(x) for x in testdata])

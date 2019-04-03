@@ -13,11 +13,11 @@ import pytest
 
 
 testdata = [
-    Group(name=name, header=header, footer=footer)
-    for name in ["",random_string("name",10,"allstring")]
-    for header in ["",random_string("header",20,"allstring")]
-    for footer in ["",random_string("footer",20,"allstring")]
-]
+    Group(name="", header="", footer="")]+\
+           [
+    Group(name=random_string("name",10,"allstring"), header=random_string("header",20,"allstring"), footer=random_string("footer",20,"allstring"))
+    for i in range(5)
+           ]
 
 @pytest.mark.parametrize("group", testdata, ids=[repr(x) for x in testdata])
 def test_add_group(app,group):
