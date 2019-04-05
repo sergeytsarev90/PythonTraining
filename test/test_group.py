@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from model.group import Group
-from model.random_strings import random_string
-
+from data.add_group import testdata
 from random import randrange
 import pytest
 
@@ -12,12 +11,6 @@ import pytest
 
 
 
-testdata = [
-    Group(name="", header="", footer="")]+\
-           [
-    Group(name=random_string("name",10,"allstring"), header=random_string("header",20,"allstring"), footer=random_string("footer",20,"allstring"))
-    for i in range(5)
-           ]
 
 @pytest.mark.parametrize("group", testdata, ids=[repr(x) for x in testdata])
 def test_add_group(app,group):

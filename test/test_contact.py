@@ -1,31 +1,14 @@
 # -*- coding: utf-8 -*-
 from model.contact import Contact
-from random import randrange
 import re
-
-from model.random_strings import random_string
-
+from data.add_contact import testdata
 from random import randrange
 import pytest
-
 
 # def random_string(prefix,maxlen):
 #     symbols = string.ascii_letters+string.digits+string.punctuation+" "*5
 #     return prefix+"".join([random.choice(symbols) for i in range(random.randrange(maxlen))])
 
-
-
-testdata = [
-    Contact(firstname="", middlename="", lastname="", nickname="", address="",homephone="", mobilephone="",workphone="",
-                      secondaryphone="", email="", email2="", email3="")]+[
-    Contact(firstname=random_string("",10,"letters"), middlename=random_string("",20,"letters"),
-            lastname=random_string("",20,"letters"), nickname=random_string("", 10, "letters"),
-            address=random_string("", 20, "allstring"),homephone=random_string("", 20, "digits"),
-            mobilephone=random_string("", 10, "digits"),workphone=random_string("", 10, "digits"),
-            secondaryphone=random_string("", 20, "digits"), email=random_string("", 20, "allstring"),
-            email2=random_string("", 20, "allstring"), email3=random_string("", 20, "allstring"))
-    for i in range(5)
-]
 
 @pytest.mark.parametrize("contact", testdata, ids=[repr(x) for x in testdata])
 def test_add_contact(app,contact):
