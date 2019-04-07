@@ -1,19 +1,10 @@
 # -*- coding: utf-8 -*-
 from model.group import Group
-from data.add_group import testdata
 from random import randrange
-import pytest
 
 
-# def random_string(prefix,maxlen):
-#     symbols = string.ascii_letters+string.digits+string.punctuation+" "*5
-#     return prefix+"".join([random.choice(symbols) for i in range(random.randrange(maxlen))])
-
-
-
-
-@pytest.mark.parametrize("group", testdata, ids=[repr(x) for x in testdata])
-def test_add_group(app,group):
+def test_add_group(app, json_groups):
+    group = json_groups
     app.group.open_page()
     old_groups = app.group.get_group_list()
     app.group.create(group)
@@ -21,8 +12,6 @@ def test_add_group(app,group):
     new_groups = app.group.get_group_list()
     old_groups.append(group)
     assert sorted(old_groups, key=Group.id_or_max) == sorted(new_groups, key=Group.id_or_max)
-
-
 
 def test_delete_some_group(app):
     app.group.open_page()
@@ -34,8 +23,6 @@ def test_delete_some_group(app):
     new_groups = app.group.get_group_list()
     assert len(old_groups)-1 == len(new_groups)
     old_groups[index:index+1]=[]
-
-
 
 def test_edit_some_group(app):
     app.group.open_page()
