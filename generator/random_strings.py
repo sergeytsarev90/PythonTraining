@@ -1,10 +1,6 @@
 import random
 import string
 
-# class Strings:
-#     def __init__(self):
-#         pass
-#
 def random_string(prefix,maxlen,type):
     if type is "allstring":
         symbols = string.ascii_letters+string.digits+string.punctuation+" "*5

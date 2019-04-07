@@ -1,14 +1,9 @@
 # -*- coding: utf-8 -*-
 from model.contact import Contact
 import re
-from data.add_contact import testdata
+from data.contacts import testdata
 from random import randrange
 import pytest
-
-# def random_string(prefix,maxlen):
-#     symbols = string.ascii_letters+string.digits+string.punctuation+" "*5
-#     return prefix+"".join([random.choice(symbols) for i in range(random.randrange(maxlen))])
-
 
 @pytest.mark.parametrize("contact", testdata, ids=[repr(x) for x in testdata])
 def test_add_contact(app,contact):
@@ -18,8 +13,6 @@ def test_add_contact(app,contact):
     new_contacts = app.contact.get_contact_list()
     old_contacts.append(contact)
     assert sorted(old_contacts, key=Contact.id_or_max) == sorted(new_contacts, key=Contact.id_or_max)
-
-
 
 def test_delete_some_contact(app):
     app.contact.open_start_page()
@@ -32,7 +25,6 @@ def test_delete_some_contact(app):
     assert len(old_contacts)-1 == len(new_contacts)
     old_contacts[index:index+1]=[]
     assert old_contacts == new_contacts
-
 
 def test_edit_some_contact(app):
     app.contact.open_start_page()
@@ -47,7 +39,6 @@ def test_edit_some_contact(app):
     assert len(old_contacts) == len(new_contacts)
     old_contacts[index] = contact
     assert sorted(old_contacts, key=Contact.id_or_max) == sorted(new_contacts, key=Contact.id_or_max)
-
 
 def test_phones_on_home_page(app):
     index = randrange(app.contact.count())
