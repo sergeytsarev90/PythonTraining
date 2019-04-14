@@ -34,6 +34,13 @@ class GroupHelper:
         self.return_to_page()
         self.group_cache = None
 
+    def delete_group_by_id(self, id):
+        driver = self.app.driver
+        self.select_group_by_id(id)
+        driver.find_element_by_name("delete").click()
+        self.return_to_page()
+        self.group_cache = None
+
     def edit_first_group(self, group):
         self.edit_group_by_index(0,group)
 
@@ -46,14 +53,26 @@ class GroupHelper:
         self.return_to_page()
         self.group_cache = None
 
+    def edit_group_by_id(self, group):
+        driver = self.app.driver
+        self.select_group_by_id(group.id)
+        driver.find_element_by_name("edit").click()
+        self.fill_group_form(group)
+        driver.find_element_by_name("update").click()
+        self.return_to_page()
+        self.group_cache = None
+
     def select_group_first_group(self):
         driver = self.app.driver
         driver.find_element_by_name("selected[]").click()
 
-
     def select_group_by_index(self,index):
         driver = self.app.driver
         driver.find_elements_by_name("selected[]")[index].click()
+
+    def select_group_by_id(self,id):
+        driver = self.app.driver
+        driver.find_element_by_xpath("//input[@value='%s']"%id).click()
 
     def fill_group_form(self, group):
         self.change_field_value("group_name", group.name)
