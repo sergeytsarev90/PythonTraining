@@ -35,11 +35,11 @@ class DbFixture:
                  secondaryphone, email, email2, email3) = row
                 list.append(Contact(id=str(id),firstname=firstname,middlename=middlename,lastname=lastname,
                                     nickname=nickname,address=address,homephone=homephone,mobilephone=mobilephone,
-                                    workphone=workphone,secondaryphone=secondaryphone,email=email,email2=email2,email3=email3))
+                                    workphone=workphone,secondaryphone=secondaryphone,email=email,email2=email2,email3=email3,
+                                    all_emails_from_db=email + email2 + email3, all_phones_from_db=homephone + mobilephone + workphone + secondaryphone))
         finally:
             cursor.close()
         return list
-
 
     def destroy(self):
         self.connection.close()
