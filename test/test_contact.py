@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from model.contact import Contact
 import re
+from random import randrange
 import random
 
 
@@ -21,27 +22,30 @@ def test_delete_some_contact(app,db,check_ui):
         app.contact.create(Contact(firstname="test"))
     old_contacts = db.get_contact_list()
     contact = random.choice(old_contacts)
-
-    #index = randrange(len(old_contacts))
-    app.contact.delete_contact_by_index(index)
+    app.contact.delete_contact_by_id(contact.id)
     new_contacts = db.get_contact_list()
-    assert len(old_contacts)-1 == len(new_contacts)
-    old_contacts[index:index+1]=[]
+    #assert len(old_contacts)-1 == len(new_contacts)
+    old_contacts.remove(contact)
     assert old_contacts == new_contacts
+    if check_ui:
+        assert sorted(app.contact.get_contact_list(), key=Contact.id_or_max) == sorted(new_contacts, key=Contact.id_or_max)
 
-def test_edit_some_contact(app):
+def test_edit_some_contact(app,db,check_ui):
     app.contact.open_start_page()
-    old_contacts = app.contact.get_contact_list()
     if app.contact.count()==0:
         app.contact.create(Contact(firstname="test"))
+    old_contacts = db.get_contact_list()
     contact = Contact(firstname="Vasiliy", middlename="Vasilich", lastname="Vasin", nickname="Vasya", mobilephone="890322439323", email="vasin@ya.ru")
-    index = randrange(len(old_contacts))
-    contact.id = old_contacts[index].id
-    app.contact.edit_contact_by_index(index, contact)
-    new_contacts = app.contact.get_contact_list()
+    contact_for_edit = random.choice(old_contacts)
+    contact.id=contact_for_edit.id
+    app.contact.edit_contact_by_id(contact)
+    new_contacts = db.get_contact_list()
     assert len(old_contacts) == len(new_contacts)
-    old_contacts[index] = contact
+    old_contacts.remove(contact_for_edit)
+    old_contacts.append(contact)
     assert sorted(old_contacts, key=Contact.id_or_max) == sorted(new_contacts, key=Contact.id_or_max)
+    if check_ui:
+        assert sorted(app.contact.get_contact_list(), key=Contact.id_or_max) == sorted(new_contacts, key=Contact.id_or_max)
 
 def test_phones_on_home_page(app):
     index = randrange(app.contact.count())

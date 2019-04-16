@@ -35,6 +35,14 @@ class ContactHelper:
         self.open_start_page()
         self.contact_cache = None
 
+    def delete_contact_by_id(self,id):
+        driver = self.app.driver
+        self.select_contact_by_id(id)
+        driver.find_element_by_xpath("//input[@value='Delete']").click()
+        driver.switch_to_alert().accept()
+        self.open_start_page()
+        self.contact_cache = None
+
     def edit_first_contact(self, contact):
         self.edit_contact_by_index(0, contact)
 
@@ -47,10 +55,23 @@ class ContactHelper:
         self.open_start_page()
         self.contact_cache = None
 
+    def edit_contact_by_id(self,contact):
+        driver = self.app.driver
+        self.open_contact_to_edit_by_id(contact.id)
+        self.fill_contact_form(contact)
+        driver.find_element_by_name("update").click()
+        self.open_start_page()
+        self.contact_cache = None
+
     def open_contact_to_edit_by_index(self, index):
         driver = self.app.driver
         self.open_start_page()
         driver.find_element_by_xpath("//tr[%s]//td[8]//img[@title='Edit']" % str(index+2)).click()
+
+    def open_contact_to_edit_by_id(self, id):
+        driver = self.app.driver
+        self.open_start_page()
+        driver.find_element_by_xpath("//a[@href='edit.php?id=%s']"%id).click()
 
     def open_contact_to_view_by_index(self, index):
         driver = self.app.driver
@@ -61,6 +82,10 @@ class ContactHelper:
     def select_contact_by_index(self, index):
         driver = self.app.driver
         driver.find_elements_by_xpath("//tr//td[1]")[index].click()
+
+    def select_contact_by_id(self, id):
+        driver = self.app.driver
+        driver.find_element_by_xpath("//input[@id='%s']"%id).click()
 
 
     def fill_contact_form(self, contact):
