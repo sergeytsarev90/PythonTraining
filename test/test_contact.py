@@ -88,6 +88,10 @@ def test_assert_all_members_from_home_page_with_db(app, db):
         assert contacts_from_home_page_sorted[x].all_phones_from_home_page == merge_phones_like_on_home_page(
             contact_from_data_base_sorted[x])
 
+
+
+
+
 def clear(s):
     return re.sub("[() -]","",s)
 

@@ -87,6 +87,10 @@ class ContactHelper:
         driver = self.app.driver
         driver.find_element_by_xpath("//input[@id='%s']"%id).click()
 
+    def select_group_by_id(self, id):
+        driver = self.app.driver
+        driver.find_element_by_xpath("//select[@name='to_group']//option[@value='%s']"%id).click()
+
 
     def fill_contact_form(self, contact):
         self.change_field_value("firstname", contact.firstname)
@@ -161,8 +165,24 @@ class ContactHelper:
         workphone = re.search("W: (.*)",text).group(1)
         mobilephone = re.search("M: (.*)",text).group(1)
         secondaryphone = re.search("P: (.*)",text).group(1)
-        return Contact(homephone=homephone,workphone=workphone,mobilephone=mobilephone,
-                       secondaryphone=secondaryphone)
+        return Contact(homephone=homephone,workphone=workphone,mobilephone=mobilephone,secondaryphone=secondaryphone)
+
+    def add_contact_in_group(self,contact,group):
+        driver = self.app.driver
+        self.select_contact_by_id(contact.id)
+        self.select_group_by_id(group.id)
+        driver.find_element_by_xpath("//input[@value='Add to']").click()
+
+
+    def go_to_group(self, group):
+        driver = self.app.driver
+        driver.find_element_by_xpath("//select[@name='group']//option[@value='%s']"%group.id).click()
+
+    def delete_contact_from_group(self, contact):
+        driver = self.app.driver
+        self.select_contact_by_id(contact.id)
+        driver.find_element_by_name("remove").click()
+
 
 
 
