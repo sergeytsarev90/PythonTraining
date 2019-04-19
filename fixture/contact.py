@@ -172,6 +172,7 @@ class ContactHelper:
         self.select_contact_by_id(contact.id)
         self.select_group_by_id(group.id)
         driver.find_element_by_xpath("//input[@value='Add to']").click()
+        self.open_start_page()
 
 
     def go_to_group(self, group):
@@ -182,10 +183,3 @@ class ContactHelper:
         driver = self.app.driver
         self.select_contact_by_id(contact.id)
         driver.find_element_by_name("remove").click()
-
-
-
-
-
-
-

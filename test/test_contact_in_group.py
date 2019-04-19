@@ -7,7 +7,9 @@ import random
 def test_add_contact_in_group(app,orm):
     prepare_contact_group_for_test(app, orm)
     group = random.choice(orm.get_group_list())
-    contact = random.choice(orm.get_contact_list())
+    if len(orm.get_contacts_not_in_group(group)) == 0:
+        app.contact.create(Contact(firstname="test"))
+    contact = random.choice(orm.get_contacts_not_in_group(group))
     old_contact_list_in_group = orm.get_contacts_in_group(group)
     app.contact.add_contact_in_group(contact,group)
     new_contact_list_in_group = orm.get_contacts_in_group(group)
@@ -18,6 +20,10 @@ def test_add_contact_in_group(app,orm):
 def test_delete_contact_from_group(app,orm):
     prepare_contact_group_for_test(app,orm)
     group = random.choice(orm.get_group_list())
+
+    if len(orm.get_contacts_in_group(group))==0:
+        app.contact.add_contact_in_group(random.choice(orm.get_contacts_not_in_group(group)), group)
+
     app.contact.go_to_group(group)
     old_contact_list_in_group = orm.get_contacts_in_group(group)
     contact = random.choice(old_contact_list_in_group)
